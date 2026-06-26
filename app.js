@@ -1,6 +1,7 @@
 // 创建入口文件
-
 const express = require("express");
+const morgan = require("morgan");
+
 const weatherRouter = require("./routes/weather");
 const translateRouter = require("./routes/translate");
 const todoRouter = require("./routes/todo");
@@ -12,6 +13,8 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 // 托管静态文件(前端页面)
 app.use(express.static("public"));
+// 添加请求日志
+app.use(morgan("dev"));
 
 // 天气查询和翻译工具路由
 app.use("/api/weather", weatherRouter);
