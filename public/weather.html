@@ -138,6 +138,47 @@
       color: #333;
       font-weight: 600;
     }
+    .forecast-section {
+      margin-top: 25px;
+      border-top: 1px solid #eef0ff;
+      padding-top: 20px;
+      display: none;
+    }
+    .forecast-section .section-title {
+      font-size: 1rem;
+      color: #555;
+      font-weight: 600;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .forecast-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+    .forecast-card {
+      background: #f5f7ff;
+      border-radius: 12px;
+      padding: 15px 10px;
+      text-align: center;
+    }
+    .forecast-card .date {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    .forecast-card .temp-range {
+      font-size: 1.1rem;
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .forecast-card .temp-range .high { color: #e74c3c; }
+    .forecast-card .temp-range .low { color: #3498db; }
+    .forecast-card .desc {
+      font-size: 0.85rem;
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -181,6 +222,10 @@
             <div class="value" id="visibility">-</div>
           </div>
         </div>
+         <div class="forecast-section" id="forecastSection">
+          <div class="section-title">📅 未来3天预报</div>
+          <div class="forecast-cards" id="forecastCards"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -223,6 +268,27 @@
         document.getElementById('windSpeed').textContent = w.windSpeed + ' km/h';
         document.getElementById('visibility').textContent = w.visibility + ' km';
 
+         // 渲染未来3天预报
+        const forecastContainer = document.getElementById('forecastCards');
+        forecastContainer.innerHTML = '';
+        if (w.forecast && w.forecast.length > 0) {
+          w.forecast.forEach(day => {
+            const parts = day.date.split('-');
+            const formattedDate = parseInt(parts[1]) + '月' + parseInt(parts[2]) + '日';
+            const card = document.createElement('div');
+            card.className = 'forecast-card';
+            card.innerHTML = `
+              <div class="date">${formattedDate}</div>
+              <div class="temp-range">
+                <span class="high">${day.maxTemp}°</span> / <span class="low">${day.minTemp}°</span>
+              </div>
+              <div class="desc">${day.weatherDesc}</div>
+            `;
+            forecastContainer.appendChild(card);
+          });
+          document.getElementById('forecastSection').style.display = 'block';
+        }
+        
         weatherResult.style.display = 'block';
       } catch (err) {
         showError('网络错误，请检查网络连接');

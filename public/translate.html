@@ -256,6 +256,8 @@
       const tmpText = sourceText.value;
       sourceText.value = resultText.value;
       resultText.value = tmpText;
+
+      translate();
     }
 
     function showError(msg) {

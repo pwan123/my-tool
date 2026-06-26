@@ -31,6 +31,14 @@ async function getWeatherByCity(city) {
     const current = data.current_condition?.[0];
     const area = data.nearest_area?.[0];
 
+    // 解析未来3天预报数据
+    const forecast = (data.weather || []).slice(0, 3).map((day) => ({
+      date: day.date,
+      maxTemp: day.maxtempC,
+      minTemp: day.mintempC,
+      weatherDesc: day.hourly?.find((h) => h.time === "1200" || h.time === "1500")?.weatherDesc?.[0]?.value || day.hourly?.[0]?.weatherDesc?.[0]?.value || "",
+    }));
+
     if (!current || !area) {
       return null;
     }
@@ -44,6 +52,7 @@ async function getWeatherByCity(city) {
       weatherDesc: current.weatherDesc[0].value,
       windSpeed: current.windspeedKmph,
       visibility: current.visibility,
+      forecast,
     };
   } catch (err) {
     if (err.name === "AbortError") {

@@ -8,7 +8,7 @@ const DATA_FILE = path.join(__dirname, "..", "data", "todos.json");
 function loadTodos() {
   try {
     return JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
-  } catch (err) {
+  } catch {
     return [];
   }
 }
@@ -18,7 +18,7 @@ function saveTodos(todos) {
 }
 
 // 从文件加载持久化数据
-let todos = loadTodos();
+const todos = loadTodos();
 
 // 1.获取所有待办
 router.get("/todos", async (req, res) => {

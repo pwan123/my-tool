@@ -21,6 +21,15 @@ app.use("/api/weather", weatherRouter);
 app.use("/api/translate", translateRouter);
 app.use("/api/todo", todoRouter);
 
+// 全局错误处理中间件（Express 通过 4 个参数识别为错误处理器）
+app.use((err, req, res, _next) => {
+  console.error("未捕获错误:", err);
+  res.status(500).json({
+    success: false,
+    error: err.message || "服务器内部错误",
+  });
+});
+
 // 启动服务
 app.listen(port, () => {
   console.log(`工具已启动:http://localhost:${port}`);
